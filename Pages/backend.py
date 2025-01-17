@@ -38,24 +38,26 @@ class PythonChatbot:
     #     if "intermediate_outputs" in result:
     #         self.intermediate_outputs.extend(result["intermediate_outputs"])
 
+# backend.py
     def user_sent_message(self, user_query, input_data=None):
-    """
-    Handle a message sent by the user to the chatbot.
+        """
+        Handle a message sent by the user to the chatbot.
+    
+        Args:
+            user_query (str): The query from the user.
+            input_data (list, optional): Additional input data.
+        """
+        input_state = {"query": user_query, "input_data": input_data}
+    
+        # Set a higher recursion limit
+        try:
+            result = self.graph.invoke(input_state, {"recursion_limit": 50})
+            return result
+        except langgraph.errors.GraphRecursionError as e:
+            # Handle the recursion error with a descriptive message
+            st.error(f"Graph execution failed: {e}")
+            return None
 
-    Args:
-        user_query (str): The query from the user.
-        input_data (list, optional): Additional input data.
-    """
-    input_state = {"query": user_query, "input_data": input_data}
-
-    # Set a higher recursion limit
-    try:
-        result = self.graph.invoke(input_state, {"recursion_limit": 50})
-        return result
-    except langgraph.errors.GraphRecursionError as e:
-        # Handle the recursion error with a descriptive message
-        st.error(f"Graph execution failed: {e}")
-        return None
 
     def reset_chat(self):
         self.chat_history = []
