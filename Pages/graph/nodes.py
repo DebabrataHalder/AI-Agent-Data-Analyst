@@ -1,4 +1,3 @@
-from langchain_openai import ChatOpenAI
 from langchain_groq import ChatGroq
 from langchain_core.messages import AIMessage, ToolMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
@@ -9,21 +8,11 @@ from .tools import complete_python_task
 from langgraph.prebuilt import ToolInvocation, ToolExecutor
 import os
 
-
-# llm = ChatOpenAI(model="gpt-4o", temperature=0)
 llm = ChatGroq(model="llama-3.1-70b-versatile", temperature=0)
 
 tools = [complete_python_task]
 
 model = llm.bind_tools(tools)
-
-
-
-
-
-
-
-
 
 tool_executor = ToolExecutor(tools)
 
