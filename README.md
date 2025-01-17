@@ -27,9 +27,9 @@ pip install -r requirements.txt
 and run the streamlit dashboard by running the following command:
 
 ```bash
-streamlit run data_analysis_streamlit_app.py --server.maxUploadSize 2000
+streamlit run app.py --server.maxUploadSize 2000
 ```
 
-Update the OpenAI API key in the data_analysis_streamlit_app.py file with your own.
+Create a .env file and add your GROQ API key.
 
 Enjoy!
