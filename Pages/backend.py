@@ -23,20 +23,39 @@ class PythonChatbot:
         workflow.set_entry_point('agent')
         return workflow.compile()
     
-    def user_sent_message(self, user_query, input_data: List[InputData]):
-        starting_image_paths_set = set(sum(self.output_image_paths.values(), []))
-        input_state = {
-            "messages": self.chat_history + [HumanMessage(content=user_query)],
-            "output_image_paths": list(starting_image_paths_set),
-            "input_data": input_data,
-        }
+    # def user_sent_message(self, user_query, input_data: List[InputData]):
+    #     starting_image_paths_set = set(sum(self.output_image_paths.values(), []))
+    #     input_state = {
+    #         "messages": self.chat_history + [HumanMessage(content=user_query)],
+    #         "output_image_paths": list(starting_image_paths_set),
+    #         "input_data": input_data,
+    #     }
 
-        result = self.graph.invoke(input_state, {"recursion_limit": 25})
-        self.chat_history = result["messages"]
-        new_image_paths = set(result["output_image_paths"]) - starting_image_paths_set
-        self.output_image_paths[len(self.chat_history) - 1] = list(new_image_paths)
-        if "intermediate_outputs" in result:
-            self.intermediate_outputs.extend(result["intermediate_outputs"])
+    #     result = self.graph.invoke(input_state, {"recursion_limit": 25})
+    #     self.chat_history = result["messages"]
+    #     new_image_paths = set(result["output_image_paths"]) - starting_image_paths_set
+    #     self.output_image_paths[len(self.chat_history) - 1] = list(new_image_paths)
+    #     if "intermediate_outputs" in result:
+    #         self.intermediate_outputs.extend(result["intermediate_outputs"])
+
+    def user_sent_message(self, user_query, input_data=None):
+    """
+    Handle a message sent by the user to the chatbot.
+
+    Args:
+        user_query (str): The query from the user.
+        input_data (list, optional): Additional input data.
+    """
+    input_state = {"query": user_query, "input_data": input_data}
+
+    # Set a higher recursion limit
+    try:
+        result = self.graph.invoke(input_state, {"recursion_limit": 50})
+        return result
+    except langgraph.errors.GraphRecursionError as e:
+        # Handle the recursion error with a descriptive message
+        st.error(f"Graph execution failed: {e}")
+        return None
 
     def reset_chat(self):
         self.chat_history = []
