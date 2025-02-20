@@ -2,14 +2,6 @@
 
 This is an AI agent built in LangGraph that can perform data analysis on a provided dataset. It is to accompany my Youtube video to showcase some advanced LangGraph techniques.
 
-Take a look at the below video for a demo:
-
-
-
-https://github.com/user-attachments/assets/83bdc543-85ca-49c0-83a5-39d948f74286
-
-
-
 ## Getting Setup
 
 If you want to use the same dataset as me, you can download it from Kaggle below:
